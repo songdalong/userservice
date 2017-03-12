@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>title</title>
+<link href="http://g.alicdn.com/bui/bui/1.1.21/css/bs3/dpl.css" rel="stylesheet">
+<link href="http://g.alicdn.com/bui/bui/1.1.21/css/bs3/bui.css" rel="stylesheet">
+</head>
+<body>
+<style>
+.bui-tooltip.bui-overlay.bui-ext-position.tips.tips-warning.x-align-top.x-align-tc-bc{
+  z-index: 9999;
+  position: absolute;
+}
+.bui-select-list .bui-list-item {
+	text-align:left;}
+	div input.bui-select-input{width:111px;}	
+	
+.mystyle1{
+        width: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        course: hand;
+    }
+</style>
+ <style>
+.bui-select-list .bui-list-item {
+	text-align:left;}
+	div input.bui-select-input{width:111px;}	
+	
+.mystyle1{
+        width: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        course: hand;
+    }
+</style>
+<div class="panel">
+	<div  class="panel-header clearfix">
+		<h3 class="pull-left">查询维护</h3>
+    </div>
+	<form id="searchForm" class="form-horizontal"  tabindex="0" style="outline: none;">
+		<div class="panel-body">
+				<div class="span8">
+					<label class="control-label">ID：</label>
+					<div id="id" class="controls">
+						<input class="text" id="id" name="idFilter" type="text" />
+					</div>
+			 	</div>
+				<div class="span8">
+					<label class="control-label">登录名：</label>
+					<div id="Loginname" class="controls">
+						<input type="text" id="loginname"  name="loginNameFilter"/>
+					</div>
+				</div>
+				<div class="span8">
+                <label class="control-label">排序字段：</label>
+                <div id="SortFiled" class="controls">
+					<input id="sortFiled" name="sortFiled" type="hidden"/>
+				</div>
+				<div class="span8">
+                <label class="control-label">排序：</label>
+                <div id="Sort" class="controls">
+					<input id="sort" name="sort" type="hidden"/>
+				</div>
+            </div>
+		</div>
+		<div class="row show-grid" style="text-align:center;padding-bottom:5px;padding-top:5px;">
+			<button id="btnSearch" type="submit" class="button button-primary">查询</button>
+			<button id="btnReset" type="reset" class="button button-primary btn_reset">重置</button>
+		</div>
+	</form>
+	<div id="grid" >
+	</div>
+</div>
+<script src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
+<script src="http://g.alicdn.com/bui/seajs/2.3.0/sea.js"></script>
+<script src="http://g.alicdn.com/bui/bui/1.1.17/config.js"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+<script type="text/javascript">
+BUI.use(['bui/uploader','bui/tooltip','bui/overlay','bui/form','bui/grid','bui/data','bui/select'],function(Uploader,Tooltip,Overlay,Form,Grid,Data,Select){
+		//<!-- 声明Grid -->
+        var Grid = Grid,
+    	Store = Data.Store;
+    	
+		//<!-- 声明列模型 -->
+		columns = [
+			{title : 'ID',dataIndex :'id',width:'29%',elCls : 'mystyle1',showTip:true},
+			{title : '登录名',dataIndex :'loginname',width:'30%',elCls : 'center'},
+			{title : '姓名',dataIndex :'name',width:'20%',elCls : 'center'},
+			{title : '密码',dataIndex :'password',width:'20%',elCls : 'center'}
+		],
+		//<!-- 声明数据源 -->
+        store = new Store({
+        	url : 'query.json',
+      		root: 'rows',
+      		autoLoad:true,
+			proxy:{
+			method:'post'
+			}
+        }),
+		
+		//<!-- 声明Grid控件 -->
+        grid = new BUI.Grid.Grid({
+            render:'#grid',
+            width:'100%',//这个属性一定要设置
+            columns : columns,
+			//plugins:[Grid.Plugins.RadioSelection],
+			loadMask: true,
+            store : store
+        });
+        
+        grid.render();
+		
+		store.on('exception',function (ev) {
+			BUI.Message.Alert(ev.error);
+		});
+		
+		var mesgWin = BUI.Message;
+		
+		//<!-- 查询窗口 -->
+		var formSearch = new Form.HForm({
+        	srcNode : '#searchForm'
+      	}).render();
+		
+		formSearch.on('beforesubmit',function(ev) {
+      		//序列化成对象
+      		var obj = formSearch.serializeToObject();
+      		var id = obj.id;
+      		var loginName = obj.loginname;
+      		if(id != "") {
+      			obj.filterFiled = "id";
+      			obj.filterValue = id;
+      		}
+      		if(obj.sort == null) {
+      			obj.sort = 1;
+      		}
+      		
+      		if(loginName != "") {
+      			obj.filterFiled = "loginname";
+      			obj.filterValue = loginName;
+      		}
+      		obj.start = 0; //返回第一页
+     	 	store.load(obj);
+			return false;
+    	});
+		$("#btnReset").on("click",function(){//重置
+			  $('#id').val('');
+			  $('#loginname').val('');
+		  return false;
+		   })
+ 
+           var sortStore = [
+             {text:'升序',value:'2'},
+             {text:'降序',value:'1'}
+           ],
+           sort_select = new BUI.Select.Select({  
+             render:'#Sort',
+             valueField:'#sort',
+             items:sortStore
+           });
+           sort_select.render();
+		   var sortStore = [
+                 {text:'id',value:'id'},
+                 {text:'loginname',value:'loginname'}
+               ],
+               sort_select = new BUI.Select.Select({  
+                 render:'#SortFiled',
+                 valueField:'#sortFiled',
+                 items:sortStore
+               });
+               sort_select.render();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,995 @@
+<style>
+.bui-select-list .bui-list-item {
+	text-align:left;}
+	div input.bui-select-input{width:111px;}	
+	
+.mystyle1{
+        width: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        course: hand;
+    }
+</style>
+<div class="panel">
+	<div  class="panel-header clearfix">
+		<h3 class="pull-left">商品基本信息维护</h3>
+    </div>
+	<form id="searchForm" class="form-horizontal"  tabindex="0" style="outline: none;">
+		<div class="panel-body">
+				<div class="span8">
+					<label class="control-label">商品名称：</label>
+					<div id="ProductName" class="controls">
+						<input id="productName" name="productName" type="text" />
+					</div>
+			 	</div>
+				<div class="span8">
+					<label class="control-label">商品类型：</label>
+					<div id="ProductTypeSel" class="controls">
+						<input type="hidden" id="productType"  name="productType"/>
+					</div>
+				</div>
+				<div class="span8">
+					<label class="control-label">状态：</label>
+					<div id="Status" class="controls">
+						<input type="hidden" id="status"  name="status"/>
+					</div>
+				</div>
+		</div>
+		<div class="row show-grid" style="text-align:center;padding-bottom:5px;padding-top:5px;">
+			<button id="btnSearch" type="submit" class="button button-primary">查询</button>
+			<button id="btnReset" type="reset" class="button button-primary btn_reset">重置</button>
+		</div>
+	</form>
+</div>
+	
+		<div class="panel"><!--第一个-->
+            <div class="panel-header clearfix">
+				<h3 class="pull-left">商品基本信息列表</h3>
+                <div class="pull-right">
+    				<button class="button button-small" id="btnAdd"><i class="icon-plus icon-white"></i>新建商品信息</button>
+                </div>
+            </div>
+			<div class="panel-body"><!--第二个-->
+                <div id="grid"></div>
+    			<!--pop_start-->
+                <div id="addContent" class="hide">
+                    <form id="addForm"  class="form-horizontal"  method="post">
+                        <div class="row">
+                            <div class="control-group span16">
+                                <label class="control-label"><s>*</s>商品名称：</label>
+                                <div id="addProductName" class="controls">
+    								<input id="addproductName" name="productName" type="text" data-rules="{required:true}" style="width:430px;"/>
+    							</div>
+                            </div>
+                         </div>
+                         <div class="row">
+                            <div class="control-group span8">
+                                <label class="control-label"><s>*</s>商品类型：</label>
+                                <div  id="addProductType" class="controls">
+                            		<input id="addtype"  name="productType" type="hidden"/>
+    							</div>
+                            </div>
+							<div class="control-group span8">
+                                <label class="control-label"><s>*</s>商品状态：</label>
+                                <div  id="addStatus" class="controls">
+    								<input id="addstatus" name="status" value="9"   type="hidden" />
+    							</div>
+                            </div>
+                        </div>
+                        <div class="row">
+							<div class="control-group span8">
+                                <label class="control-label"><s>*</s>商品原价：</label>
+                                <div  id="addOriPrice" class="controls">
+    								<input id="addoriPrice" name="oriPrice"  value="00"  type="text" onblur="checkOriPrice()"/>
+    							</div>
+                            </div>
+                            <div class="control-group span8">
+                                <label class="control-label"><s>*</s>商品现价：</label>
+                                <div  id="addCurPrice" class="controls">
+    								<input id="addcurPrice" name="curPrice"  value="00"  type="text" onblur="checkCurPrice()"/>
+    							</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        	<div class="control-group span8">
+                                <label class="control-label"><s>*</s>库存数量：</label>
+                                <div  id="addAmount" class="controls">
+                            		<input id="addamount"  name="amount" value="00" type="text" onblur="checkAmount()"/>
+    							</div>
+                            </div>
+	                        <div class="control-group class="span8">
+								<label class="control-label"><s>*</s>排序权重：</label>
+								<div id="addOrderby" class="controls">
+									<input id="addorderby" name="orderby" value="00" type="text" onblur="checkNumber()"/>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="height:80px;">
+							<div class="span8" >
+						        <label class="control-label">商品LOGO：</label>
+						        <div class="controls">
+						      		<img id="productlogo" style="width: 80px;height: 80px;" src="/imp/images/photo_def.jpg"/>
+							        <a id="changeHeadImg" href="javascript:void(0)">编辑图片</a>
+							        <input id="productLogoAdd" name="productLogo" type="hidden" value="$propertyUtil.getProperty("image.server.path")"/>
+						        </div>
+					        </div>
+					        <div class="span8" >
+					        	<label class="control-label">技术规格：</label>
+						        <div class="controls" id="productParameter">
+						        	<img id="productparameter" style="width: 80px;height: 80px;" src="/imp/images/photo_def.jpg"/>
+							        <a id="changeParaImg" href="javascript:void(0)">编辑图片</a>
+							        <input id="productParameterAdd" name="productParameter" type="hidden" value="$propertyUtil.getProperty("image.server.path")"/>
+						        </div>
+					        </div>
+					    </div>
+					    <input id="logoId" name="logoId" type="hidden"/>
+                    </form>
+                    <div class="panel-header clearfix">
+						<h3 class="pull-left">商品详情</h3>
+			            <div class="pull-right">
+							<button class="button button-small" id="btnAdddetail"><i class="icon-plus icon-white"></i>新建商品详情图片</button>
+			            </div>
+			        </div>
+			        <div id="detail_grid" >
+			        </div>
+                </div>
+                
+				<div id="editContent" class="hide">
+                    <form id="editForm" class="form-horizontal" class="form-horizontal" method="post">
+                   		<input id="productIdEdit" name="productId"   type="hidden"/>
+                         <div class="row">
+                            <div class="control-group span16">
+                                <label class="control-label"><s>*</s>商品名称：</label>
+                                <div id="addProductName" class="controls">
+    								<input id="addproductName" name="productName" type="text" data-rules="{required:true}" style="width:430px;"/>
+    							</div>
+                            </div>
+                         </div>
+                         <div class="row">
+                            <div class="control-group span8">
+                                <label class="control-label"><s>*</s>商品类型：</label>
+                                <div  id="editProductType" class="controls">
+                            		<input id="edittype"  name="productType" type="hidden"/>
+    							</div>
+                            </div>
+							<div class="control-group span8">
+                                <label class="control-label"><s>*</s>商品状态：</label>
+                                <div  id="editStatus" class="controls">
+    								<input id="editStatus" name="status" value="9"   type="hidden" />
+    							</div>
+                            </div>
+                        </div>
+                        <div class="row">
+							<div class="control-group span8">
+                                <label class="control-label"><s>*</s>商品原价：</label>
+                                <div  id="addOriPrice" class="controls">
+    								<input id="addoriPrice" name="oriPrice"  value="00"  type="text" onblur="checkOriPrice()"/>
+    							</div>
+                            </div>
+                            <div class="control-group span8">
+                                <label class="control-label"><s>*</s>商品现价：</label>
+                                <div  id="addCurPrice" class="controls">
+    								<input id="addcurPrice" name="curPrice"  value="00"  type="text" onblur="checkCurPrice()"/>
+    							</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        	<div class="control-group span8">
+                                <label class="control-label"><s>*</s>库存数量：</label>
+                                <div  id="addAmount" class="controls">
+                            		<input id="addamount"  name="amount" value="00" type="text" onblur="checkAmount()"/>
+    							</div>
+                            </div>
+	                        <div class="control-group class="span8">
+								<label class="control-label"><s>*</s>排序权重：</label>
+								<div id="addOrderby" class="controls">
+									<input id="addorderby" name="orderby" value="00" type="text" onblur="checkNumber()"/>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="height:80px;">
+							<div class="span8" >
+						        <label class="control-label">商品LOGO：</label>
+						        <div class="controls">
+						      		<img id="productlogoedits" style="width: 80px;height: 80px;" src="/imp/images/photo_def.jpg"/>
+							        <a id="changeHeadImgEdit" href="javascript:void(0)">编辑图片</a>
+							        <input id="productLogoEdit" name="productLogo" type="hidden" value=""/>
+						        </div>
+					        </div>
+					        <div class="span8" >
+					        	<label class="control-label">技术规格：</label>
+						        <div class="controls" id="productParameter">
+						        	<img id="productparameteredits" style="width: 80px;height: 80px;" src="/imp/images/photo_def.jpg"/>
+							        <a id="changeParaImgEdit" href="javascript:void(0)">编辑图片</a>
+							        <input id="productParameterEdit" name="productParameter" type="hidden" value=""/>
+						        </div>
+					        </div>
+					    </div>
+                    </form>
+                    <div class="panel-header clearfix">
+						<h3 class="pull-left">商品详情</h3>
+			            <div class="pull-right">
+							<button class="button button-small" id="btnAdddetail_edit"><i class="icon-plus icon-white"></i>新建商品详情图片</button>
+			            </div>
+			        </div>
+			        <div id="detail_grid_edit" >
+			        </div>
+                </div>
+                
+			</div>
+		</div>
+		
+ <div id="addOderByCon" class="hide">
+    <form id="addOderForm" class="form-horizontal"  method="post" action="addOderBy.htm">
+    	<input id="productId" name="productId" type="hidden"/>
+    	<input id='logoId' name="logoId" type="hidden">
+    	<input id='graphicurl' name="graphicurl" type="hidden">
+    	<input id='state' name="state" type="hidden">
+    	<input id='createDateTime' name="createDateTime" type="hidden">
+        <div class="control-group class="span">
+			<label class="control-label"><s>*</s>排序权重：</label>
+			<div id="aOrderby" class="controls">
+				<input id="aorderby" name="orderby" value="" type="text" onblur="checkNum()"/>
+			</div>
+  		</div>
+  	</form>
+ </div>
+
+ <!--商品logo-->
+  <div id="headerUploadContent" class="hide">
+	<form id='_fileForm' enctype='multipart/form-data'>
+		<img id="uploadImg" style="width: 160px;height: 160px" src="${link.contextPath}/images/photo_def.jpg"/>
+		<div style="padding: 10px 155px ">
+			<input id="uploadInput" name="uploadInput" type="file">
+		</div>
+	</form>
+  </div>
+				
+ <!--规格参数-->
+  <div id="paraContent" class="hide">
+	<form id='_fileParaForm' enctype='multipart/form-data'>
+	 <img id="uploadParaImg" style="width: 160px;height: 160px" src="${link.contextPath}/images/photo_def.jpg"/>
+	 <div style="padding: 10px 155px ">
+		<input id="uploadParaInput" name="uploadParaInput" type="file">
+	</div>
+	</form>
+ </div>
+ 
+<script type="text/javascript" src="${link.contextPath}/js/jquery.form.js"></script>
+<script type="text/javascript" src="js/jquery.form.js"></script>
+ <script src="http://g.tbcdn.cn/fi/bui/jquery-1.8.1.min.js"></script>
+<script src="http://g.alicdn.com/bui/seajs/2.3.0/sea.js"></script>
+<script type="text/javascript">
+BUI.use(['bui/uploader','bui/tooltip','bui/overlay','bui/form','bui/grid','bui/data'],function(Uploader,Tooltip,Overlay,Form,Grid,Data){
+	var para_img_path=$("#productParameterAdd").val();
+	var paed_img_path=$("#productParameterEdit").val();
+	
+		//<!--商品详情维护begin-->
+		grapcolumns = [
+		    {title : '图片名称',dataIndex :'graphicurl',elCls : 'center',width:'60%'},
+		    {title : '操作',dataIndex :'logoId',elCls : 'center',width:'40%',renderer : function (value,obj) {
+		    		return '<span class="grid-command btn-sel">查看原图</span><span class="grid-command btn-del">删除</span><span class="grid-command binging">权重排序</span>';
+		  }}
+		],
+		grapstore = new Data.Store({
+		   url : 'getProductGraphicDetailById.json',
+		   autoLoad:true,
+		   pageSize:3	// 配置分页数目
+		}),
+		grapgrid = new Grid.Grid({
+			render:'#detail_grid',
+		    columns : grapcolumns,
+		    loadMask: true,
+		    store : grapstore,
+		    width :'100%',
+		    height:130,
+		    // 底部工具栏
+		    bbar:{
+		        pagingBar:true
+		    }
+		 });
+		
+		 grapgrid.render();
+		 grapgrid.on('aftershow',function(){
+			$(".grid-command.btn-sel,.grid-command.btn-del,.grid-command.binging").on('click',function(){
+				grapgrid.clearSelected();
+				var butText = $(this).text();
+				ordialog.show();
+				grapgrid.on('itemselected',function(){
+					var itemEdit = grapgrid.getSelected();
+					if(butText=='查看原图'){
+						javascript:window.open(para_img_path+itemEdit.graphicurl)
+					}
+					if(butText=='删除'){
+						jQuery.post('delProductGraphicDetail.json',{logoId:itemEdit.logoId}, function (data) {
+							if(data.success==false){
+    							BUI.Message.Alert(data.msg,'warning');
+    						}else{
+								BUI.Message.Alert(data.msg,'success');
+								grapstore.load();
+							}
+                        });
+					}
+					if(butText=='权重排序'){
+					 	jQuery.getJSON('getListGraph.json',{logoId:itemEdit.logoId}, function (editData) {
+							if(editData.success == false){
+							    BUI.Message.Alert(editData.msg, 'error');
+						    }else{
+						    	addOderForm.setRecord(editData);
+						    }
+						});
+						ordialog.show();
+					}
+					butText = undefined;
+				})
+			})
+		});
+		 
+			var addOderForm = new Form.HForm({
+            	srcNode : '#addOderForm',
+				initRecord:{}
+          	}).render();
+			var ordialog = new Overlay.Dialog({
+                title:'修改权重排序',
+                width:320,
+                height:150,
+                contentId:'addOderByCon',
+				listeners:{
+						hide:function(){
+							addOderForm.reset();
+						}
+				},
+                success:function () {
+					var saveDate = addOderForm.serializeToObject();
+					var items = grid.getSelected();
+					var regb = /^([1-9]\d{0,2}|1000)$/;
+					var orderby = saveDate.orderby;
+					if(jQuery.trim(saveDate.orderby)==''||!orderby.match(regb)){
+						BUI.Message.Alert("权重排序不能为空！",'warning');
+						return false;
+					}
+				  jQuery.post('updateOderBy.json',saveDate, function (root) {
+    					if(root.success==false){
+    						BUI.Message.Alert(root.msg,'warning');
+    					}else{
+    						ordialog.close();
+    						BUI.Message.Alert(root.msg,'success');
+    						grapstore_edit.load();
+    					}
+                })
+				}
+          	});
+		grapcolumns_edit = [
+		    {title : '图片名称',dataIndex :'graphicurl',elCls : 'center',width:'60%'},
+		    {title : '操作',dataIndex :'logoId',elCls : 'center',width:'40%',renderer : function (value,obj) {
+		    		return '<span class="grid-command btn-sel">查看原图</span><span class="grid-command btn-del">删除</span><span class="grid-command binging">权重排序</span>';
+		    }}
+		],
+		grapstore_edit = new Data.Store({
+		   url : 'getProductGraphicDetailById.json',
+		   autoLoad:true,
+		   pageSize:3	// 配置分页数目
+		}),
+		grapgrid_edit = new Grid.Grid({
+			render:'#detail_grid_edit',
+		    columns : grapcolumns_edit,
+		    loadMask: true,
+		    store : grapstore_edit,
+		    width :'100%',
+		    height:130,
+		    // 底部工具栏
+		    bbar:{
+		        pagingBar:true
+		    }
+		 });
+		 grapgrid_edit.render();  
+		 grapgrid_edit.on('aftershow',function(){
+			$(".grid-command.btn-sel,.grid-command.btn-del,.grid-command.binging").on('click',function(){
+				grapgrid_edit.clearSelected();
+				var butText = $(this).text();
+				grapgrid_edit.on('itemselected',function(){
+					var itemEdit = grapgrid_edit.getSelected();
+					if(butText=='查看原图'){
+						javascript:window.open(para_img_path+itemEdit.graphicurl)
+					}
+					if(butText=='删除'){
+						var itemEditproduct = grid.getSelected();
+						jQuery.post('delProductGraphicDetail.json',{logoId:itemEdit.logoId,productId:itemEditproduct.productId}, function (data) {
+							if(data.success==false){
+    							BUI.Message.Alert(data.msg,'warning');
+    						}else{
+								BUI.Message.Alert(data.msg,'success');
+								grapstore_edit.load();
+							}
+                        });
+					}
+					if(butText=='权重排序'){
+					 	jQuery.getJSON('getListGraph.json',{logoId:itemEdit.logoId}, function (editData) {
+							if(editData.success == false){
+							    BUI.Message.Alert(editData.msg, 'error');
+						    }else{
+						    	addOderForm.setRecord(editData);
+						    }
+						});
+						ordialog.show();
+					}
+					butText = undefined;
+				})
+			})
+		});	
+
+		//<!--商品详情维护end-->
+		var url = 'uploadGraph.json';
+		var datetime = new Date().getTime();
+		var typeUrl = '',routeUrl = '',uploadUrl='';
+		
+		var seluploader = new Uploader.Uploader({
+		render: '#J_Uploader',
+		url: url,
+		text:'上传图文详情',
+		disabled:false,
+		itemTpl:'',
+		rules: {
+			//文件的类型
+			ext: ['.png,.jpg','文件类型只能为图片(.png)'],
+			max: [5, '文件的最大个数不能超过{0}个'],
+			minSize: [20, '文件的大小不能小于{0}KB'],
+			maxSize: [4096, '文件大小不能大于4M']
+		},
+		success: function(root){
+		},
+		error: function(root){
+		 	var filenames = $('#fileNames').val()+","+root;
+		 	$('#fileNames').val(filenames);
+		}
+	}).render();
+	var seluploader = new Uploader.Uploader({
+		render: '#_Uploader',
+		url: url,
+		text:'修改图文详情',
+		disabled:false,
+		itemTpl:'',
+		rules: {
+			//文的类型
+			ext: ['.png,.jpg','文件类型只能为(.png)'],
+			max: [5, '文件的最大个数不能超过{0}个'],
+			minSize: [20, '文件的大小不能小于{0}KB'],
+			maxSize: [4096, '文件大小不能大于4M']
+		},
+		success: function(root){
+		},
+		error: function(root){
+			var filenames = $('#fileNames').val()+","+root;
+		 	$('#fileNames').val(filenames);
+		 	store.load();
+		}
+	}).render();
+	
+	//<!-- 商品logo	-->
+	var img_path=$("#productLogoAdd").val();
+	var imged_path=$("#productLogoEdit").val();
+	var dialog = new BUI.Overlay.Dialog({
+		title: '上传图片',
+		width: 500,
+		height: 300,
+		//文的类型
+		rules: {
+			ext: ['.png,.jpg','文件类型只能为(.png.jpg)'],
+			minSize: [20, '文件的大小不能小于{0}KB'],
+			maxSize: [4096, '文件大小不能大于4M']
+		},
+		//配置DOM容器的编号
+		contentId: 'headerUploadContent',
+		buttons:[{
+			text:'确定',
+			elCls : 'button button-primary', 
+		  	handler : 
+			  function(){
+				this.close();
+			  }
+		}]
+	});
+	$("#changeHeadImg").click(function () {
+		uploadUrl = "uploadLogo.json";
+		dialog.show();
+	});
+	$("#changeHeadImgEdit").click(function () {
+		uploadUrl = "uploadLogo.json";
+		dialog.show();
+		var logourl=$('#productLogoEdit').val();
+		if(logourl!='')
+			$("#uploadImg").attr('src',img_path+logourl);
+		else
+			$("#uploadImg").attr('src','/imp/images/photo_def.jpg');
+	});
+	
+	$("#uploadInput").change(function (e) {
+		$("#_fileForm").ajaxSubmit({
+			type: "post",
+			url: uploadUrl,
+			success: function (obj) {
+				if(uploadUrl=='uploadLogo.json'){
+					$("#productLogoAdd").val(obj.productLogo);
+					$("#productLogoEdit").val(obj.productLogo);
+					$("#uploadImg").attr('src',img_path+obj.productLogo);
+					$("#productlogo").attr('src',img_path+obj.productLogo);
+					$("#productlogoedits").attr('src',img_path+obj.productLogo);
+				}else if(uploadUrl=='uploadGraph.json'){
+					$("#uploadImg").attr('src',img_path+obj);
+					grapstore.load();
+				}else{
+					$("#uploadImg").attr('src',img_path+obj);
+					grapstore_edit.load();
+				}
+			}
+		});
+	})
+	//<!-- 商品规格参数	-->
+	var paradialog = new BUI.Overlay.Dialog({
+		title: '上传规格参数',
+		width: 500,
+		height: 300,
+		//文的类型
+		rules: {
+			ext: ['.png,.jpg','文件类型只能为(.png.jpg)'],
+			minSize: [20, '文件的大小不能小于{0}KB'],
+			maxSize: [4096, '文件大小不能大于4M']
+		},
+		//配置DOM容器的编号
+		contentId: 'paraContent',
+		buttons:[{
+			text:'确定',
+			elCls : 'button button-primary', 
+		  	handler : 
+			  function(){
+				this.close();
+			  }
+		}]
+	});
+	$("#changeParaImg").click(function () {
+		paradialog.show();
+	});
+	$("#changeParaImgEdit").click(function () {
+		paradialog.show();
+		var logourl=$('#productParameterEdit').val();
+		if(logourl!='')
+			$("#uploadParaImg").attr('src',para_img_path+logourl);
+		else
+			$("#uploadParaImg").attr('src','/imp/images/photo_def.jpg');
+	});
+	
+	$("#uploadParaInput").change(function (e) {
+		$("#_fileParaForm").ajaxSubmit({
+			type: "post",
+			url: "uploadParaFile.json",
+			success: function (root) {
+				$("#productParameterAdd").val(root.productParameter);
+				$("#productParameterEdit").val(root.productParameter);
+				$("#uploadParaImg").attr('src',para_img_path+root.productParameter);
+				$("#productparameter").attr('src',para_img_path+root.productParameter);
+				$("#productparameteredits").attr('src',para_img_path+root.productParameter);
+			}
+		});
+	});
+	
+		//<!-- 声明Grid -->
+        var Grid = Grid,
+    	Store = Data.Store;
+    	
+		//<!-- 声明列模型 -->
+		columns = [
+			{title : '商品名称',dataIndex :'productName',width:'47%',elCls : 'mystyle1',showTip:true},
+			{title : '商品类型',dataIndex :'productType',width:'9%',elCls : 'center'},
+			{title : '商品原价',dataIndex :'oriPrice',width:'8%',elCls : 'center'},
+			{title : '商品现价',dataIndex :'curPrice',width:'8%',elCls : 'center'},
+			{title : '库存数量',dataIndex :'amount',width:'8%',elCls : 'center'},
+			{title : '创建时间',dataIndex :'createDateTime',width:'19%',elCls : 'center'},
+			{title : '操作',dataIndex :'status',elCls : 'center',width:'15%',renderer : function (value,obj) {
+		    	if(value=='d1-已上架')
+		    		return '<span class="grid-command btn-down" style="color:red;">下架</span><span class="grid-command btn-edit">修改</span><span class="grid-command btn-del">删除</span>';
+		    	else
+		    		return '<span class="grid-command btn-up" style="color:green;">上架</span><span class="grid-command btn-edit">修改</span><span class="grid-command btn-del">删除</span>';
+		    }}
+		],
+		
+		//<!-- 声明数据源 -->
+        store = new Store({
+        	url : 'getProductInfoList.json',
+      		root: 'rows',
+      		autoLoad:true,
+			proxy:{
+			method:'post'
+			},
+      		pageSize:10	// 配置分页数目
+        }),
+		
+		//<!-- 声明Grid控件 -->
+        grid = new Grid.Grid({
+            render:'#grid',
+            width:'100%',//这个属性一定要设置
+            columns : columns,
+			//plugins:[Grid.Plugins.RadioSelection],
+			loadMask: true,
+		 	bbar:{
+        		pagingBar:true
+     		},
+            store : store
+        });
+        
+        grid.render();
+		
+		store.on('exception',function (ev) {
+			BUI.Message.Alert(ev.error);
+		});
+		
+		var mesgWin = BUI.Message;
+		
+		grid.on('aftershow',function(){
+			$(".grid-command.btn-edit,.grid-command.btn-del,.grid-command.btn-down,.grid-command.btn-up").on('click',function(){
+				grid.clearSelected();
+				var butText = $(this).text();
+				grid.on('itemselected',function(){
+					if(butText=='下架'||butText=='上架'){
+						var itemEdit = grid.getSelected();
+						var option;
+						if(butText=='下架') option = 'd2';
+						if(butText=='上架') option = 'd1';
+						jQuery.post('option.json',{productId:itemEdit.productId,option:option}, function (data) {
+							if(data.success==false){
+    							BUI.Message.Alert(data.msg,'warning');
+    						}else{
+								BUI.Message.Alert(data.msg,'success');
+								store.load();
+							}
+                        });
+					}
+					if(butText=='修改'){
+    					var itemEdit = grid.getSelected();
+						var itemEditNo =grid.getSelection().length;
+						if(itemEdit==null){
+							mesgWin.Alert('请选中要操作的记录',function(){},'info');
+							return;
+						}
+						if(itemEditNo>1){
+							mesgWin.Alert('您选中了多条记录请选择一条记录进行操作',function(){},'info');
+							return;
+						}
+        				jQuery.getJSON('get.json', {productId: itemEdit.productId}, function (editData) {
+							if(editData.success==false){
+								BUI.Message.Alert(editData.msg);
+							}else{
+								editForm.setRecord(editData);
+								edittype.setSelectedValue(editData.productType);
+								editstatus.setSelectedValue(editData.status);
+								if(editData.productLogo!='')
+									$("#productlogoedits").attr('src',img_path+editData.productLogo);
+								else
+									$("#productlogoedits").attr('src','/imp/images/photo_def.jpg');
+								if(editData.productParameter!='')
+									$("#productparameteredits").attr('src',img_path+editData.productParameter);
+								else
+									$("#productparameteredits").attr('src','/imp/images/photo_def.jpg');
+								grapstore_edit.load({productId:editData.productId});
+							}
+                    	});
+						editDialog.show();
+						butText = undefined;
+					}
+					if(butText=='删除'){
+                        var itemDel = grid.getSelected();
+						if(itemDel.status.substr(0,2)=='d3'){
+						   BUI.Message.Alert('该商品已经是删除状态！','warning');    
+						}else{
+							mesgWin.Show({
+								title : '提示框',
+								msg : '是否要删除选中信息',
+								icon : 'question',
+								buttons : [{
+									text:'是',
+									elCls : 'button button-primary',
+									handler : function(){
+										jQuery.getJSON('delete.json', {productId: itemDel.productId}, function (data) {
+											if(data.success==false){
+													BUI.Message.Alert(data.msg,'warning');
+											}else{
+												   BUI.Message.Alert(data.msg,'success');
+												   store.load();
+											}
+										});
+										this.close();
+										grid.clearSelected();
+									}},{
+									text:'否',
+									elCls : 'button button-primary',
+									handler : function(){
+										this.close();
+										grid.clearSelected();
+									}
+								}]
+							});
+						
+						}
+					}
+					butText = undefined;
+				})
+			})
+		})
+		
+		//<!-- 查询窗口 -->
+		var formSearch = new Form.HForm({
+        	srcNode : '#searchForm'
+      	}).render();
+		
+		formSearch.on('beforesubmit',function(ev) {
+      		//序列化成对象
+      		var obj = formSearch.serializeToObject();
+      		obj.start = 0; //返回第一页
+     	 	store.load(obj);
+			return false;
+    	});
+		
+		//<!-- 商品类型 -->
+        var typeStore = new Data.Store({
+            url : '../dict/dictstore.json?dict_kind=productType&dict_null=1',
+            autoLoad:true
+        }),
+		//<!-- 商品类型下拉菜单-->
+        seltype = new BUI.Select.Select({ 
+            render:'#ProductTypeSel',
+            valueField:'#productType',
+            store:typeStore
+        });
+        seltype.render();
+		
+		//<!-- 新增商品类型下拉菜单-->
+        addtype = new BUI.Select.Select({ 
+            render:'#addProductType',
+            valueField:'#addtype',
+            store:typeStore
+        });
+        addtype.render();
+		
+		//<!-- 修改商品类型下拉菜单-->
+        edittype = new BUI.Select.Select({ 
+            render:'#editProductType',
+            valueField:'#edittype',
+            store:typeStore
+        });
+        edittype.render();
+		
+		//<!-- 商品状态-->
+        var statusStore = new Data.Store({
+            url : '../dict/dictstore.json?dict_kind=productStatus&dict_null=1',
+            autoLoad:true
+        }),
+		
+        selstatus = new BUI.Select.Select({ 
+            render:'#Status',
+            valueField:'#status',
+            store:statusStore
+        });
+        selstatus.render();
+        
+		//<!-- 新增商品状态下拉菜单-->
+		addstatus = new BUI.Select.Select({ 
+            render:'#addStatus',
+            valueField:'#addstatus',
+            store:statusStore
+        });
+        addstatus.render();
+		
+		editstatus = new BUI.Select.Select({ 
+            render:'#editStatus',
+            valueField:'#editstatus',
+            store:statusStore
+        });
+        editstatus.render();
+    	
+		//<!-- 新增窗口 -->
+		var addForm = new Form.HForm({
+        	srcNode : '#addForm',
+			initRecord:{}
+      	}).render();
+		
+      	var addDialog = new Overlay.Dialog({
+            title:'新增商品',
+            width:650,
+            height:600,
+            contentId:'addContent',
+			listeners:{
+					hide:function(){
+						addForm.reset();
+						addForm.clearErrors();
+						addtype.setSelectedValue('');
+						addstatus.setSelectedValue('');
+					}
+			},
+            success:function () {
+				var saveDate = addForm.serializeToObject();
+				var rego = /^[0-9]+(\.[0-9]{2})?$/;
+				var oriPrice = saveDate.oriPrice;
+				var regc = /^[0-9]+(\.[0-9]{2})?$/;
+				var curPrice = saveDate.curPrice;
+				var rega = /^\+?[1-9]\d*$/;
+				var amount = saveDate.amount;
+				var regb = /^([1-9]\d{0,2}|1000)$/;
+				var orderby = saveDate.orderby;
+				if(jQuery.trim(saveDate.productName)==''){
+					BUI.Message.Alert("商品名称不能为空！",'warning');
+					return false;
+				}
+				if(jQuery.trim(saveDate.productType)==''){
+						BUI.Message.Alert("商品类型不能为空！",'warning');
+						return false;
+				}
+				if(jQuery.trim(saveDate.status)==''){
+						BUI.Message.Alert("商品状态不能为空！",'warning');
+						return false;
+				}
+				if(jQuery.trim(saveDate.oriPrice)==''||!oriPrice.match(rego)){
+					BUI.Message.Alert("商品原价不能为空或者包含非数字符！",'warning');
+					return false;
+				}
+				if(jQuery.trim(saveDate.curPrice)==''||!curPrice.match(regc)){
+					BUI.Message.Alert("商品现价不能为空或者包含非数字符！",'warning');
+					return false;
+				}
+				if(jQuery.trim(saveDate.amount)==''||!amount.match(rega)){
+					BUI.Message.Alert("库存数量不能为空或者包含非数字符！",'warning');
+					return false;
+				}
+				if(jQuery.trim(saveDate.orderby)==''||!orderby.match(regb)){
+					BUI.Message.Alert("权重排序不能为空！",'warning');
+					return false;
+				}
+			  jQuery.post('addProdctInfo.json',saveDate, function (root) {
+					if(root.success==false){
+						BUI.Message.Alert(root.msg,'warning');
+					}else{
+                        store.load();
+						addDialog.close();
+						BUI.Message.Alert(root.msg,'success');
+					}
+            })
+			}
+      	});
+        
+		addDialog.show();
+		addDialog.close();
+		
+		$('#btnAdd').on('click',function () {
+          addDialog.show();
+          $("#uploadImg").attr('src','/imp/images/photo_def.jpg');
+          $("#uploadParaImg").attr('src','/imp/images/photo_def.jpg');
+          $("#productlogo").attr('src','/imp/images/photo_def.jpg');
+          $("#productparameter").attr('src','/imp/images/photo_def.jpg');
+          $("#productLogoAdd").val('');
+          $("#productParameterAdd").val('');
+        });
+        $('#btnAdddetail').on('click',function () {
+          uploadUrl = "uploadGraph.json";
+          $("#uploadImg").attr('src','/imp/images/photo_def.jpg');
+          dialog.show();
+        });
+        $('#btnAdddetail_edit').on('click',function () {
+          var itemEdit = grid.getSelected();
+          $("#uploadImg").attr('src','/imp/images/photo_def.jpg');
+          uploadUrl = "uploadGraph.json?productId="+itemEdit.productId;
+          dialog.show();
+        });
+		var editForm = new Form.HForm({
+			srcNode:'#editForm'
+		}).render();
+
+		var editDialog = new Overlay.Dialog({
+                title:'修改商品信息',
+                width:610,
+                height:610,
+                contentId:'editContent',
+				buttons:[{
+					text:'确定',
+					elCls : 'button button-primary', 
+				  	handler : 
+					  function(){
+					  	var editDate = editForm.serializeToObject();
+						jQuery.post('update.json',editDate, function (data) {
+							if(data.success==false){
+								BUI.Message.Alert(data.msg,'warning');
+							}else{
+								store.load();
+								editDialog.close();
+								BUI.Message.Alert(data.msg,'success');
+							}
+						})
+					  }
+				},{
+					text:'取消',
+					elCls : 'button button-primary', 
+				  	handler : 
+					  function(){
+					  	grid.clearSelected();
+						editDialog.close();
+					  }
+				}]
+        });
+		
+		editDialog.on('hide',function(){
+			grid.clearSelected();
+		});
+		
+		editDialog.show();
+		editDialog.close();
+		
+		$("#btnReset").on("click",function(){
+		   $('#productName').val('');
+		   $('#productType').val('');
+		   $('#amount').val('');
+		   $('#curPrice').val('');
+		   $('#oriPrice').val('');
+		   selstatus.setSelectedValue("");
+		   seltype.setSelectedValue("");
+			return false;
+		})
+	}
+);
+
+  function checkCurPrice(){
+     var reg = /^[0-9]+(\.[0-9]{2})?$/;
+     var strNumber =document.getElementById("addcurPrice").value;
+     if (!reg.test(strNumber))
+     	BUI.Message.Alert("现价请输入正整数或保留两位小数点的小数",'warning');
+   }
+   function checkEditCurPrice(){
+     var reg = /^[0-9]+(\.[0-9]{2})?$/;
+     var strNumber =document.getElementById("editcurPrice").value;
+     if (!reg.test(strNumber))
+     	BUI.Message.Alert("现价请输入正整数或保留两位小数点的小数",'warning');
+   }
+  function checkOriPrice(){
+     var reg = /^[0-9]+(\.[0-9]{2})?$/;
+     var strNumber =document.getElementById("addoriPrice").value;
+     if (!reg.test(strNumber))
+     	BUI.Message.Alert("原价请输入正整数或保留两位小数点的小数",'warning');
+   }
+   function checkEditOriPrice(){
+     var reg = /^[0-9]+(\.[0-9]{2})?$/;
+     var strNumber =document.getElementById("editoriPrice").value;
+     if (!reg.test(strNumber))
+   		alert("原价请输入正整数或保留两位小数点的小数");
+   }
+  function checkAmount(){
+     var reg = /^\+?[1-9]\d*$/;
+     var strNumber =document.getElementById("addamount").value;
+     if (!reg.test(strNumber))
+     	 BUI.Message.Alert("库存数量请输入大于0的正整数",'warning');
+   }
+   function checkEditAmount(){
+     var reg = /^\+?[1-9]\d*$/;
+     var strNumber =document.getElementById("editamount").value;
+     if (!reg.test(strNumber))
+     	BUI.Message.Alert("库存数量请输入大于0的正整数",'warning');
+   }
+  function checkNumber(){
+     var reg = /^([1-9]\d{0,2}|1000)$/;
+     var strNumber =document.getElementById("addorderby").value;
+     if (!reg.test(strNumber))
+     	BUI.Message.Alert("排序权重请输入0~1000之间的正整数",'warning');
+   }
+   function checkEditNumber(){
+     var reg = /^([1-9]\d{0,2}|1000)$/;
+     var strNumber =document.getElementById("editorderby").value;
+     if (!reg.test(strNumber))
+     	BUI.Message.Alert("排序权重请输入0~1000之间的正整数",'warning');
+   }
+	  function checkNum(){
+     var reg = /^([1-9]\d{0,2}|1000)$/;
+     var strNumber =document.getElementById("aorderby").value;
+     if (!reg.test(strNumber))
+     	BUI.Message.Alert("排序权重请输入0~1000之间的正整数",'warning');
+   }
+s
+</script>
+
+
+<script src="http://g.alicdn.com/bui/bui/1.1.17/config.js"></script>
