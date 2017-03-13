@@ -1,0 +1,3 @@
+原理: 此工程依赖于concurrenthashmap,然后基于map的结构,定制了一个自己的datasource
+使用的环境,再unbutu 14下,浏览器使用firefox,没有测试chrome
+引用技术: spring boot, bui框架
